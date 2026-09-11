@@ -703,13 +703,16 @@ const recStamp = ms => {
        + String(d.getMilliseconds()).padStart(3, '0');
 };
 
-// "2026-09-10 07h10 L.csv". Stunde und Minute mit "h" statt ":" — ein
-// Doppelpunkt ist unter Windows kein zulässiges Zeichen im Dateinamen, und
-// die Dateien landen regelmässig genau dort.
+// "2026-09-11_11-36-02_L.csv": YYYY-MM-DD_HH-MM-SS_side. Bindestriche statt
+// ":" in der Uhrzeit — ein Doppelpunkt ist unter Windows kein zulässiges
+// Zeichen im Dateinamen, und die Dateien landen regelmässig genau dort. Keine
+// Leerzeichen, damit der Name auf der Kommandozeile ohne Anführungszeichen
+// durchgeht. Sekunden, damit zwei Aufnahmen in derselben Minute sich nicht
+// gegenseitig überschreiben.
 const recFileName = side => {
   const d = rec.started;
-  return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())} `
-       + `${pad2(d.getHours())}h${pad2(d.getMinutes())} ${side}.csv`;
+  return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}_`
+       + `${pad2(d.getHours())}-${pad2(d.getMinutes())}-${pad2(d.getSeconds())}_${side}.csv`;
 };
 
 function recOnStep(clip, step) {
